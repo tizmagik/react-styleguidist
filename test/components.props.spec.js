@@ -1,10 +1,10 @@
+import React from 'react';
 import { parse } from 'react-docgen';
-
 import Props, { Code } from 'rsg-components/Props/Props';
 import Markdown from 'rsg-components/Markdown';
 
 function render(propTypes, defaultProps = []) {
-	let props = parse(`
+	const props = parse(`
 		import { Component, PropTypes } from 'react';
 		export default class Cmpnt extends Component {
 			static propTypes = {
@@ -17,73 +17,72 @@ function render(propTypes, defaultProps = []) {
 			}
 		}
 	`);
-	return <Props props={props}/>;
+	return <Props props={props} />;
 }
 
 describe('Props', () => {
-
 	it('should render PropTypes.string', () => {
-		let result = render(['color: PropTypes.string']);
+		const result = render(['color: PropTypes.string']);
 		expectReactShallow(result).to.contain(
 			<tr>
 				<td><Code>color</Code></td>
 				<td><Code>string</Code></td>
 				<td></td>
-				<td><div/></td>
+				<td><div /></td>
 			</tr>
 		);
 	});
 
 	it('should render PropTypes.string with a default value', () => {
-		let result = render(['color: PropTypes.string'], ['color: "pink"']);
+		const result = render(['color: PropTypes.string'], ['color: "pink"']);
 		expectReactShallow(result).to.contain(
 			<tr>
 				<td><Code>color</Code></td>
 				<td><Code>string</Code></td>
 				<td><Code>pink</Code></td>
-				<td><div/></td>
+				<td><div /></td>
 			</tr>
 		);
 	});
 
 	it('should render PropTypes.string.isRequired', () => {
-		let result = render(['color: PropTypes.string.isRequired']);
+		const result = render(['color: PropTypes.string.isRequired']);
 		expectReactShallow(result).to.contain(
 			<tr>
 				<td><Code>color</Code></td>
 				<td><Code>string</Code></td>
 				<td><span>Required</span></td>
-				<td><div/></td>
+				<td><div /></td>
 			</tr>
 		);
 	});
 
 	it('should render PropTypes.arrayOf', () => {
-		let result = render(['colors: PropTypes.arrayOf(PropTypes.string)']);
+		const result = render(['colors: PropTypes.arrayOf(PropTypes.string)']);
 		expectReactShallow(result).to.contain(
 			<tr>
 				<td><Code>colors</Code></td>
 				<td><Code>string[]</Code></td>
 				<td></td>
-				<td><div/></td>
+				<td><div /></td>
 			</tr>
 		);
 	});
 
 	it('should render PropTypes.instanceOf', () => {
-		let result = render(['num: PropTypes.instanceOf(Number)']);
+		const result = render(['num: PropTypes.instanceOf(Number)']);
 		expectReactShallow(result).to.contain(
 			<tr>
 				<td><Code>num</Code></td>
 				<td><Code>Number</Code></td>
 				<td></td>
-				<td><div/></td>
+				<td><div /></td>
 			</tr>
 		);
 	});
 
 	it('should render PropTypes.shape', () => {
-		let result = render(['foo: PropTypes.shape({bar: PropTypes.number.isRequired, baz: PropTypes.any})']);
+		const result = render(['foo: PropTypes.shape({bar: PropTypes.number.isRequired, baz: PropTypes.any})']);
 		expectReactShallow(result).to.contain(
 			<tr>
 				<td><Code>foo</Code></td>
@@ -104,27 +103,26 @@ describe('Props', () => {
 	});
 
 	it('should render description in Markdown', () => {
-		let result = render(['/**\n * Label\n */\ncolor: PropTypes.string']);
+		const result = render(['/**\n * Label\n */\ncolor: PropTypes.string']);
 		expectReactShallow(result).to.contain(
 			<tr>
 				<td><Code>color</Code></td>
 				<td><Code>string</Code></td>
 				<td></td>
-				<td><div><Markdown text="Label"/></div></td>
+				<td><div><Markdown text="Label" /></div></td>
 			</tr>
 		);
 	});
 
 	it('should render unknown proptype for a prop when a relevant proptype is not assigned', () => {
-		let result = render([], ['color: "pink"']);
+		const result = render([], ['color: "pink"']);
 		expectReactShallow(result).to.contain(
 			<tr>
 				<td><Code>color</Code></td>
 				<td><Code>unknown</Code></td>
 				<td><Code>pink</Code></td>
-				<td><div/></td>
+				<td><div /></td>
 			</tr>
 		);
 	});
-
 });

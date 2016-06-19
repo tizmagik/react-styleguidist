@@ -13,7 +13,7 @@ class TableOfContents extends Component {
 
 	renderLevel(components, sections, searchTerm) {
 		if (searchTerm !== '') {
-			let regExp = new RegExp(searchTerm.split('').join('.*'), 'gi');
+			const regExp = new RegExp(searchTerm.split('').join('.*'), 'gi');
 			components = components.filter(component => component.name.match(regExp));
 		}
 
@@ -36,7 +36,7 @@ class TableOfContents extends Component {
 
 	render() {
 		let { searchTerm } = this.state;
-		let { components, sections } = this.props;
+		const { components, sections } = this.props;
 
 		searchTerm = searchTerm.trim();
 

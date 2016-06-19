@@ -5,7 +5,7 @@ import extend from 'lodash/extend';
 export function setComponentsNames(components) {
 	components.map((component) => {
 		// Try to detect component name or fallback to file name or directory name.
-		let { module } = component;
+		const { module } = component;
 		component.name = (component.props && component.props.displayName) || (
 			module.default
 				? (module.default.displayName || module.default.name)

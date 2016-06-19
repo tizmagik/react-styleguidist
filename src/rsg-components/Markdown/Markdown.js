@@ -12,7 +12,7 @@ const bugsUrl = 'https://github.com/sapegin/react-styleguidist/issues';
 
 function handleIterate(Tag, props, children) {
 	// Increase the level of headings
-	let m = Tag.match(headingRegExp);
+	const m = Tag.match(headingRegExp);
 	if (m) {
 		Tag = 'h' + (Number(m[1]) + 2);
 	}
@@ -44,7 +44,7 @@ export default function Markdown({
 	text,
 	className,
 }) {
-	let classes = cx(s.root, className);
+	const classes = cx(s.root, className);
 
 	return (
 		<MDReactComponent

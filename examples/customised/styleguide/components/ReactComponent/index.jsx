@@ -1,4 +1,4 @@
-import { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 
 const s = require('./ReactComponent.css');
 
@@ -31,7 +31,7 @@ Renderer.propTypes = {
 	pathLine: PropTypes.string.isRequired,
 	description: PropTypes.object,
 	propList: PropTypes.object,
-	examples: PropTypes.array
+	examples: PropTypes.array,
 };
 
 

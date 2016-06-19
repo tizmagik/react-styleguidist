@@ -4,20 +4,19 @@ const _ = require('lodash');
 import * as utils from '../src/utils/utils';
 
 describe('utils', () => {
-
 	describe('setComponentsNames', () => {
 		it('should set name property to each component', () => {
-			let result = utils.setComponentsNames([
+			const result = utils.setComponentsNames([
 				{
-					module: {displayName: 'Foo'}
+					module: { displayName: 'Foo' },
 				},
 				{
-					module: {name: 'Bar'}
+					module: { name: 'Bar' },
 				},
 				{
-					module: {displayName: 'Foo'},
-					props: {displayName: 'FooOverride'}
-				}
+					module: { displayName: 'Foo' },
+					props: { displayName: 'FooOverride' },
+				},
 			]);
 			expect(_.map(result, 'name')).to.eql(['Foo', 'Bar', 'FooOverride']);
 		});
@@ -36,19 +35,19 @@ describe('utils', () => {
 			utils.globalizeComponents([
 				{
 					name: 'Foo',
-					module: 13
+					module: 13,
 				},
 				{
 					name: 'Bar',
-					module: 27
+					module: 27,
 				},
 				{
 					name: 'PathedFoo',
-					module: {a: 32},
+					module: { a: 32 },
 					props: {
-						path: 'a'
-					}
-				}
+						path: 'a',
+					},
+				},
 			]);
 			expect(Object.keys(global).length).to.eql(sourceGlobalLength + 3);
 			expect(global.Foo).to.eql(13);
@@ -56,5 +55,4 @@ describe('utils', () => {
 			expect(global.PathedFoo).to.eql(32);
 		});
 	});
-
 });

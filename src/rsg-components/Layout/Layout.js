@@ -48,7 +48,7 @@ const Layout = (Renderer) => class extends Component {
 	}
 
 	render() {
-		let { config, components, sections } = this.props;
+		const { config, components, sections } = this.props;
 
 		return (
 			<Renderer

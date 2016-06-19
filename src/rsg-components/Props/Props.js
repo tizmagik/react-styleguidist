@@ -7,7 +7,7 @@ import sMarkdown from '../Markdown/Markdown.css';
 
 /* eslint-disable react/prop-types */
 
-export let Code = ({ className = '', children }) => {
+export const Code = ({ className = '', children }) => {
 	return <code className={sMarkdown.code + ' ' + className}>{children}</code>;
 };
 
@@ -21,9 +21,9 @@ export default class Props extends Component {
 	};
 
 	renderRows(props) {
-		let rows = [];
-		for (let name in props) {
-			let prop = props[name];
+		const rows = [];
+		for (const name in props) {
+			const prop = props[name];
 			rows.push(
 				<tr key={name}>
 					<td className={s.cell}><Code className={s.name}>{name}</Code></td>
@@ -41,7 +41,7 @@ export default class Props extends Component {
 			return 'unknown';
 		}
 
-		let { name } = type;
+		const { name } = type;
 
 		switch (name) {
 			case 'arrayOf':
@@ -68,8 +68,8 @@ export default class Props extends Component {
 	}
 
 	renderDescription(prop) {
-		let { description } = prop;
-		let extra = this.renderExtra(prop);
+		const { description } = prop;
+		const extra = this.renderExtra(prop);
 		return (
 			<div>
 				{description && <Markdown className={s.inline} text={description} />}
@@ -102,7 +102,7 @@ export default class Props extends Component {
 		if (!Array.isArray(getType(prop).value)) {
 			return <span>{getType(prop).value}</span>;
 		}
-		let values = getType(prop).value.map(({ value }) => (
+		const values = getType(prop).value.map(({ value }) => (
 			<li className={s.listItem} key={value}>
 				<Code>{unquote(value)}</Code>
 			</li>
@@ -116,7 +116,7 @@ export default class Props extends Component {
 		if (!Array.isArray(getType(prop).value)) {
 			return <span>{getType(prop).value}</span>;
 		}
-		let values = getType(prop).value.map((value, index) => (
+		const values = getType(prop).value.map((value, index) => (
 			<li className={s.listItem} key={value.name + index}>
 				<Code className={s.type}>{this.renderType(value)}</Code>
 			</li>
@@ -128,12 +128,12 @@ export default class Props extends Component {
 	}
 
 	renderShape(shape) {
-		let props = shape.type.value;
-		let rows = [];
-		for (let name in props) {
-			let prop = props[name];
-			let defaultValue = this.renderDefault(prop);
-			let description = prop.description;
+		const props = shape.type.value;
+		const rows = [];
+		for (const name in props) {
+			const prop = props[name];
+			const defaultValue = this.renderDefault(prop);
+			const description = prop.description;
 			rows.push(
 				<div key={name}>
 					<Code className={s.name}>{name}</Code>{': '}

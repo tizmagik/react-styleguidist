@@ -26,7 +26,7 @@ export default class Playground extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		let { code } = nextProps;
+		const { code } = nextProps;
 		if (code) {
 			this.setState({
 				code,
@@ -47,8 +47,8 @@ export default class Playground extends Component {
 	}
 
 	render() {
-		let { code, showCode } = this.state;
-		let { highlightTheme } = this.props;
+		const { code, showCode } = this.state;
+		const { highlightTheme } = this.props;
 
 		return (
 			<div className={s.root}>

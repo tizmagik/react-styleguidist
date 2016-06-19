@@ -1,28 +1,31 @@
-var path = require('path');
-var reactDocs = require('react-docgen');
-var config = require('../src/utils/config');
-var isArray = require('lodash/isArray');
+/* eslint-disable no-console */
+const path = require('path');
+const reactDocs = require('react-docgen');
+const config = require('../src/utils/config');
+const isArray = require('lodash/isArray');
 
-var requirePlaceholder = '<%{#require#}%>';
+const requirePlaceholder = '<%{#require#}%>';
 
-module.exports = function (source) {
-	this.cacheable && this.cacheable();
+module.exports = function(source) {
+	this.cacheable && this.cacheable(); // eslint-disable-line
 
-	var defaultPropsParser = function(filePath, source) {
+	const defaultPropsParser = function(filePath, source) {
 		return reactDocs.parse(source, config.resolver, config.handlers);
 	};
 
-	var jsonProps;
+	let jsonProps;
+	let file;
 	try {
-		const file = this.request.split('!').pop()
-		var propsParser = config.propsParser || defaultPropsParser;
-		var props = propsParser(file, source);
+		file = this.request.split('!').pop();
+		const propsParser = config.propsParser || defaultPropsParser;
+		const props = propsParser(file, source);
 
 		jsonProps = (isArray(props) ? props : [props]).map(function(doc) {
 			if (doc.description) {
 				doc.doclets = reactDocs.utils.docblock.getDoclets(doc.description);
 				doc.description = doc.description.replace(/^@(\w+)(?:$|\s((?:[^](?!^@\w))*))/gmi, '');
-			} else {
+			}
+			else {
 				doc.doclets = {};
 			}
 
@@ -36,9 +39,9 @@ module.exports = function (source) {
 			);
 		});
 	}
-	catch (e) {
+	catch (err) {
 		console.log('Error when parsing', path.relative(process.cwd(), file));
-		console.log(e.toString());
+		console.log(err.toString());
 		console.log();
 		jsonProps = [];
 	}
@@ -47,6 +50,6 @@ module.exports = function (source) {
 		'if (module.hot) {',
 		'	module.hot.accept([]);',
 		'}',
-		'module.exports = [' + jsonProps.join(',') + '];'
+		'module.exports = [' + jsonProps.join(',') + '];',
 	].join('\n');
 };

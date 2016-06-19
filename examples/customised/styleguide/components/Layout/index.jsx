@@ -1,4 +1,4 @@
-import { PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 
 import s from './Layout.css';
 
@@ -22,7 +22,7 @@ const Renderer = ({ title, components, toc }) => (
 Renderer.propTypes = {
 	title: PropTypes.string.isRequired,
 	components: PropTypes.object.isRequired,
-	toc: PropTypes.node.isRequired
+	toc: PropTypes.node.isRequired,
 };
 
 export default Renderer;

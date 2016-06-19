@@ -1,36 +1,37 @@
-var _ = require('lodash');
-var hljs = require('highlight.js');
-var createRenderer = require('../src/utils/markdown.js');
-var loaderUtils = require('loader-utils');
+/* eslint-disable no-invalid-this */
+const _ = require('lodash');
+const hljs = require('highlight.js');
+const createRenderer = require('../src/utils/markdown.js');
+const loaderUtils = require('loader-utils');
 
-var md = createRenderer();
+const md = createRenderer();
 
-var evalPlaceholder = '<%{#eval#}%>';
-var codePlaceholder = '<%{#code#}%>';
+const evalPlaceholder = '<%{#eval#}%>';
+const codePlaceholder = '<%{#code#}%>';
 
 // Need to supply the regex test as a string for reuse in unit tests
 // Currently, trying to change flags throws a TypeError
 // Slated for change in ES6, but not possible now:
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Description
-var requireAnythingTest = 'require\\s*\\(([^)]+)\\)';
-var requireAnythingRegex = new RegExp(requireAnythingTest, 'g');
-var simpleStringRegex = /^"([^"]+)"$|^'([^']+)'$/;
+const requireAnythingTest = 'require\\s*\\(([^)]+)\\)';
+const requireAnythingRegex = new RegExp(requireAnythingTest, 'g');
+const simpleStringRegex = /^"([^"]+)"$|^'([^']+)'$/;
 
 function readExamples(markdown) {
-	var codeChunks = [];
+	const codeChunks = [];
 
 	// Collect code blocks and replace them with placeholders
 	md.renderer.rules.code_block = md.renderer.rules.fence = function(tokens, idx) {
-		var token = tokens[idx];
-		var code = tokens[idx].content.trim();
+		const token = tokens[idx];
+		const code = tokens[idx].content.trim();
 		if (token.type === 'fence' && token.info && token.info !== 'example') {
 			// Render fenced blocks with language flag as regular Markdown code snippets
-			var highlighted;
+			let highlighted;
 			try {
 				highlighted = hljs.highlight(token.info, code).value;
 			}
-			catch (e) {
-				highlighted = e.message;
+			catch (err) {
+				highlighted = err.message;
 			}
 			return '```' + token.info + '\n' + highlighted + '\n```';
 		}
@@ -38,17 +39,17 @@ function readExamples(markdown) {
 		return codePlaceholder;
 	};
 
-	var rendered = md.render(markdown);
+	const rendered = md.render(markdown);
 
-	var chunks = [];
-	var textChunks = rendered.split(codePlaceholder);
+	const chunks = [];
+	const textChunks = rendered.split(codePlaceholder);
 	textChunks.forEach(function(chunk) {
 		if (chunk) {
-			chunks.push({type: 'markdown', content: chunk});
+			chunks.push({ type: 'markdown', content: chunk });
 		}
-		var code = codeChunks.shift();
+		const code = codeChunks.shift();
 		if (code) {
-			chunks.push({type: 'code', content: code, evalInContext: evalPlaceholder});
+			chunks.push({ type: 'code', content: code, evalInContext: evalPlaceholder });
 		}
 	});
 
@@ -58,31 +59,33 @@ function readExamples(markdown) {
 // Returns a list of all strings used in require(...) calls in the given source code.
 // If there is any other expression inside the require call, it throws an error.
 function findRequires(codeString) {
-	var requires = {};
+	const requires = {};
 	codeString.replace(requireAnythingRegex, function(requireExprMatch, requiredExpr) {
-		var requireStrMatch = simpleStringRegex.exec(requiredExpr.trim());
+		const requireStrMatch = simpleStringRegex.exec(requiredExpr.trim());
 		if (!requireStrMatch) {
 			throw new Error('Requires using expressions are not supported in examples. (Used: ' + requireExprMatch + ')');
 		}
-		var requiredString = requireStrMatch[1] ? requireStrMatch[1] : requireStrMatch[2];
+		const requiredString = requireStrMatch[1] ? requireStrMatch[1] : requireStrMatch[2];
 		requires[requiredString] = true;
 	});
 	return Object.keys(requires);
 }
 
-function examplesLoader(source, map) {
-	this.cacheable && this.cacheable();
+function examplesLoader(source /* , map*/) {
+	if (this.cacheable) {
+		this.cacheable();
+	}
 
 	// Replace __COMPONENT__ placeholders with the passed-in componentName
-	var componentName = loaderUtils.parseQuery(this.query).componentName || '__COMPONENT__';
-	var examples = readExamples(source.replace(/__COMPONENT__/g, componentName));
+	const componentName = loaderUtils.parseQuery(this.query).componentName || '__COMPONENT__';
+	const examples = readExamples(source.replace(/__COMPONENT__/g, componentName));
 
 	// We're analysing the examples' source code to figure out the require statements. We do it manually with regexes,
 	// because webpack unfortunately doesn't expose its smart logic for rewriting requires
 	// (https://webpack.github.io/docs/context.html). Note that we can't just use require(...) directly in runtime,
 	// because webpack changes its name to __webpack__require__ or sth.
-	var codeFromAllExamples = _.map(_.filter(examples, {type: 'code'}), 'content').join('\n');
-	var requiresFromExamples = findRequires(codeFromAllExamples);
+	const codeFromAllExamples = _.map(_.filter(examples, { type: 'code' }), 'content').join('\n');
+	const requiresFromExamples = findRequires(codeFromAllExamples);
 
 	return [
 		'if (module.hot) {',
@@ -105,16 +108,16 @@ function examplesLoader(source, map) {
 			'   var require = requireInRuntime;' +
 			'   return eval(code);' +
 			'}'
-		) + ';'
+		) + ';',
 	].join('\n');
 }
 
 _.assign(examplesLoader, {
-	requireAnythingTest: requireAnythingTest,
-	requireAnythingRegex: requireAnythingRegex,
-	simpleStringRegex: simpleStringRegex,
-	readExamples: readExamples,
-	findRequires: findRequires
+	requireAnythingTest,
+	requireAnythingRegex,
+	simpleStringRegex,
+	readExamples,
+	findRequires,
 });
 
 module.exports = examplesLoader;

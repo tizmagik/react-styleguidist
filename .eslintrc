@@ -1,4 +1,13 @@
 {
-	"parser": "babel-eslint",
-	"extends": "tamia/react"
+  "parser": "babel-eslint",
+  "extends": "tamia/react",
+  "globals": {
+    "expect": false
+  },
+  "rules": {
+    "prefer-const": ["error", {
+      "destructuring": "any",
+      "ignoreReadBeforeAssign": false
+    }]
+  }
 }

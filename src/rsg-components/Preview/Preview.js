@@ -43,7 +43,7 @@ export default class Preview extends Component {
 	}
 
 	executeCode() {
-		let mountNode = this.refs.mount;
+		const mountNode = this.refs.mount;
 
 		ReactDOM.unmountComponentAtNode(mountNode);
 
@@ -61,9 +61,9 @@ export default class Preview extends Component {
 				const state = Object.freeze(${JSON.stringify(this.componentState)});
 				${code}
 			`;
-			let compiledCode = this.compileCode(code);
-			let component = this.props.evalInContext(compiledCode, this.setComponentState.bind(this));
-			let wrappedComponent = (
+			const compiledCode = this.compileCode(code);
+			const component = this.props.evalInContext(compiledCode, this.setComponentState.bind(this));
+			const wrappedComponent = (
 				<Wrapper>
 					{component}
 				</Wrapper>
@@ -79,7 +79,7 @@ export default class Preview extends Component {
 	}
 
 	renderError() {
-		let { error } = this.state;
+		const { error } = this.state;
 		if (error) {
 			return (
 				<pre className={s.playgroundError}>{error}</pre>

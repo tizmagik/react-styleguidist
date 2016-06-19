@@ -1,18 +1,19 @@
-import { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 
 import s from './PushButton.css';
 
 /**
  * An example-less button.
+ * @returns {Component}
  */
 export default function PushButton({
 	color,
 	size,
-	children
+	children,
 }) {
-	let styles = {
-		color: color,
-		fontSize: PushButton.sizes[size]
+	const styles = {
+		color,
+		fontSize: PushButton.sizes[size],
 	};
 
 	return (
@@ -29,10 +30,10 @@ PushButton.propTypes = {
 };
 PushButton.defaultProps = {
 	color: '#333',
-	size: 'normal'
+	size: 'normal',
 };
 PushButton.sizes = {
 	small: '10px',
 	normal: '14px',
-	large: '18px'
+	large: '18px',
 };

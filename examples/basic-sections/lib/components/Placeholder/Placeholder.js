@@ -1,4 +1,4 @@
-import { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import s from './Placeholder.css';
 
@@ -9,18 +9,18 @@ export default class Placeholder extends Component {
 	static propTypes = {
 		type: PropTypes.oneOf(['animal', 'bacon', 'beard', 'bear', 'cat', 'food', 'city', 'nature', 'people']),
 		width: PropTypes.number,
-		height: PropTypes.number
+		height: PropTypes.number,
 	};
 
 	static defaultProps = {
 		type: 'animal',
 		width: 150,
-		height: 150
+		height: 150,
 	};
 
 	getImageUrl() {
-		let { type, width, height } = this.props;
-		let types = {
+		const { type, width, height } = this.props;
+		const types = {
 			animal: `http://placeimg.com/${width}/${height}/animals`,
 			bacon: `http://baconmockup.com/${width}/${height}`,
 			bear: `http://www.placebear.com/${width}/${height}`,
@@ -35,9 +35,9 @@ export default class Placeholder extends Component {
 	}
 
 	render() {
-		let { width, height } = this.props;
+		const { width, height } = this.props;
 		return (
-			<img className={s.root} src={this.getImageUrl()} width={width} height={height}/>
+			<img className={s.root} src={this.getImageUrl()} width={width} height={height} />
 		);
 	}
 }

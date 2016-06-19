@@ -1,12 +1,10 @@
 import createRenderer from '../src/utils/markdown';
 
 describe('markdown', () => {
-
-	it('should render only block level code in Markdown', () => {
-	});
+	it('should render only block level code in Markdown');
 
 	it('should render PropTypes.string.isRequired', () => {
-		let markdown = `
+		const markdown = `
 # Header
 
 Text with *some* **formatting** and a [link](/foo).
@@ -21,7 +19,7 @@ Text with some \`code\`.
 <span/>
 \`\`\`
 `;
-		let expected = `
+		const expected = `
 # Header
 
 Text with *some* **formatting** and a [link](/foo).
@@ -34,8 +32,7 @@ Text with some \`code\`.
 <pre><code>&lt;span/&gt;
 </code></pre>
 `;
-		let result = createRenderer().render(markdown);
+		const result = createRenderer().render(markdown);
 		expect(result).to.eql(expected);
 	});
-
 });
